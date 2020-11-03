@@ -1,6 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { NgForm } from "@angular/forms";
+import { Router } from "@angular/router";
 import { userModel } from "src/app/models/user.models";
+import { AuthService } from "src/app/services/auth.service";
 
 @Component({
   selector: "app-register",
@@ -10,7 +12,7 @@ import { userModel } from "src/app/models/user.models";
 export class RegisterComponent implements OnInit {
   user: userModel;
 
-  constructor() {}
+  constructor(private auth: AuthService, private router: Router) {}
 
   ngOnInit() {
     this.user = new userModel();
@@ -19,8 +21,13 @@ export class RegisterComponent implements OnInit {
     if (form.invalid) {
       return;
     }
-    console.log("form sending");
-    console.log(this.user);
-    console.log(form);
+    this.auth.newUser(this.user).subscribe(
+      (resp) => {
+        this.router.navigateByUrl("/home");
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 }
