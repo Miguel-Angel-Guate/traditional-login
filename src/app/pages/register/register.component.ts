@@ -11,6 +11,7 @@ import { AuthService } from "src/app/services/auth.service";
 })
 export class RegisterComponent implements OnInit {
   user: userModel;
+  rememberUser: false;
 
   constructor(private auth: AuthService, private router: Router) {}
 
@@ -23,6 +24,9 @@ export class RegisterComponent implements OnInit {
     }
     this.auth.newUser(this.user).subscribe(
       (resp) => {
+        if (this.rememberUser) {
+          localStorage.setItem("email", this.user.email);
+        }
         this.router.navigateByUrl("/home");
       },
       (err) => {

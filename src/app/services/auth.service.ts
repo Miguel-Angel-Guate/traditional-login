@@ -15,7 +15,9 @@ export class AuthService {
   constructor(private http: HttpClient) {
     this.readToken();
   }
-  logOut() {}
+  logOut() {
+    localStorage.removeItem("token");
+  }
   logIn(user: userModel) {
     const authData = {
       email: user.email,
@@ -57,5 +59,8 @@ export class AuthService {
       this.userToken = "";
     }
     return this.userToken;
+  }
+  isAuth(): boolean {
+    return this.userToken.length > 2;
   }
 }
